@@ -12,31 +12,31 @@ env:
   AWS_TF_STATE_BUCKET_NAME: ${{secrets.AWS_TF_STATE_BUCKET_NAME}}
   AWS_REGION: ap-south-1
 jobs:
-  deploy-infra: null
-  runs-on: ubuntu-latest
-  steps:
-    - name: Chekout
-      uses: actions/checkout@v2
-    - name: setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_wrapper: false
-    - name: Terraform Init
-      id: init
-      run: terraform init -backend-donfig="bucket=$AWS_TF_STATE_BUCKET_NAME"
-        -backend-config="ap-south-1"
-      working-directory: ./infrastructure/terraform
-    - name: Terraform Plan
-      id: plan
-      run: |-
-        terraform plan \
-        -var="region=ap-south-1"\
-        -var="public_key=$AWS_SSH_KEY_PUBLIC"\
-        -var="private_key=$AWS_SSH_KEY_PVT" \
-        -var="key_name=deployer-key" \
-        -out=PLAN
-      working-directory: ./infrastructure/terraform
-    - name: Terraform Apply
-      id: apply
-      run: terraform apply PLAN
-      working-directory: ./infrastructure/terraform
+  deploy-infra:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Chekout
+        uses: actions/checkout@v2
+      - name: setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_wrapper: false
+      - name: Terraform Init
+        id: init
+        run: terraform init -backend-donfig="bucket=$AWS_TF_STATE_BUCKET_NAME"
+          -backend-config="ap-south-1"
+        working-directory: ./infrastructure/terraform
+      - name: Terraform Plan
+        id: plan
+        run: |-
+          terraform plan \
+          -var="region=ap-south-1"\
+          -var="public_key=$AWS_SSH_KEY_PUBLIC"\
+          -var="private_key=$AWS_SSH_KEY_PVT" \
+          -var="key_name=deployer-key" \
+          -out=PLAN
+        working-directory: ./infrastructure/terraform
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply PLAN
+        working-directory: ./infrastructure/terraform

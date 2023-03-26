@@ -28,7 +28,7 @@ jobs:
         working-directory: ./infrastructure/terraform
       - name: Terraform Plan
         id: plan
-        run: terraform plan -var="access_key=$AWS_ACCESS_KEY_ID" -var="secret_key=$AWS_SECRET_KEY_ID" -var="region=ap-south-1" -var="public_key=$AWS_SSH_KEY_PUBLIC" -var="private_key=$AWS_SSH_KEY_PVT" -var="key_name=deployer-key" -out=PLAN
+        run: terraform plan -var="region=ap-south-1" -var="public_key=$AWS_SSH_KEY_PUBLIC" -var="private_key=$AWS_SSH_KEY_PVT" -var="key_name=deployer-key" -out=PLAN
         working-directory: ./infrastructure/terraform
       - name: Terraform Apply
         id: apply

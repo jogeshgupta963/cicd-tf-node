@@ -1,4 +1,4 @@
----
+
 name: Deploy Node on EC@ with Terraform
 on:
   push:

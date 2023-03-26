@@ -29,7 +29,7 @@ resource "aws_instance" "deployer" {
       timeout = "4m"
     }
     tags = {
-      "name" = "deploy_TF_vm"
+      "Name" = "deploy_TF_vm"
     }
 }
 

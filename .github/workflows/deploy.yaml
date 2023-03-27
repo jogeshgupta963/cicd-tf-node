@@ -70,11 +70,12 @@ jobs:
           REPOSITORY: node-app
           IMAGE_TAG: ${{github.sha}}
           AWS_DEFAULT_REGION: ap-south-1
-        uses: appleboy/ssh-action@v0.1.8
+        uses: appleboy/ssh-action@master
         with:
           host: ${{env.SERVER_PUBLIC_IP}}
           username: ubuntu
           key: ${{env.AWS_SSH_KEY_PVT}}
+          port: 22
           envs: AWS_SSH_KEY_PVT,REGISTRY,REPOSITORY,IMAGE_TAG,AWS_ACCESS_KEY_ID,AWS_SECRET_KEY_ID,AWS_REGION,AWS_DEFAULT_REGION
           script: |-
             sudo apt update
@@ -83,4 +84,4 @@ jobs:
             sudo $(aws ecr get-login --no-include-email --region ap-south-1);
             sudo docker system prune -a
             sudo docker pull $REGISTRY/$REPOSITORY:$IMAGE_TAG
-            sudo docker run -d --name app_c -p 80:5000 $REGISTRY/$REPOSITORY:$IMAGE_TAG
+            sudo docker run -d --name app_c -p 80:APP_PORT $REGISTRY/$REPOSITORY:$IMAGE_TAG

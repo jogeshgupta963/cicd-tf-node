@@ -67,5 +67,4 @@ resource "aws_key_pair" "deployer" {
 
 output "insance_public_ip"{
     value = aws_instance.deployer.public_ip
-    sensitive = true
 }

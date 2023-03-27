@@ -64,6 +64,8 @@ jobs:
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
         working-directory: ./server
+      - name: server ip
+        run: cat ${{env.SERVER_PUBLIC_IP}}
       - name: Deploy docker image to EC2
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}

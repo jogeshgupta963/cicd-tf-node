@@ -80,7 +80,7 @@ jobs:
             sudo apt update
             sudo apt install docker.io -y
             sudo apt install awscli -y
-            sudo $(aws ecr get-login --no-include-email --region ap-south-1)
+            sudo $(aws ecr get-login --no-include-email --region ap-south-1);
             sudo docker system prune -a
             sudo docker pull $REGISTRY/$REPOSITORY:$IMAGE_TAG
             sudo docker run -d --name app_c -p 80:5000 $REGISTRY/$REPOSITORY:$IMAGE_TAG

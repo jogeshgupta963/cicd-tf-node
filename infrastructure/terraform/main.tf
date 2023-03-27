@@ -65,6 +65,6 @@ resource "aws_key_pair" "deployer" {
     public_key = var.public_key
 }
 
-output "insance_public_ip"{
+output "instance_public_ip"{
     value = aws_instance.deployer.public_ip
 }

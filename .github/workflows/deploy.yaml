@@ -34,6 +34,9 @@ jobs:
         id: apply
         run: terraform apply PLAN
         working-directory: ./infrastructure/terraform
+      - name: cat
+        run: cat terraform.tfstate
+        working-directory: ./infrastructure/terraform
       - name: Set outputs
         id: set-ip
         run: echo "::set-state name=instance_public_ip::$(terraform output instance_public_ip)"

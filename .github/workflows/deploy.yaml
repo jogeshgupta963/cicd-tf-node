@@ -55,8 +55,11 @@ jobs:
       - name: Login to AWS ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+      - name: check id
+        if: ${{env.SERVER_PUBLIC_IP}} != ""
+        run: echo multiline not null
       - name: cat id
-        run: echo {{env.SERVER_PUBLIC_IP}}
+        run: echo ${{env.SERVER_PUBLIC_IP}}
       - name: Build and push docker image
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -75,8 +78,7 @@ jobs:
           AWS_DEFAULT_REGION: ap-south-1
         uses: appleboy/ssh-action@master
         with:
-          # host: ${{env.SERVER_PUBLIC_IP}}
-          host: ec2-43-205-117-236.ap-south-1.compute.amazonaws.com
+          host: ${{env.SERVER_PUBLIC_IP}}
           username: ubuntu
           key: ${{env.AWS_SSH_KEY_PVT}}
           port: 22

@@ -76,5 +76,5 @@ resource "aws_key_pair" "deployer" {
 }
 
 output "instance_public_ip"{
-    value = aws_instance.deployer.public_ip
+    value = aws_instance.deployer.public_dns
 }

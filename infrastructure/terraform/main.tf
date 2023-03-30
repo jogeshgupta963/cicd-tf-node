@@ -19,7 +19,7 @@ provider "aws" {
 resource "aws_instance" "deployer" {
     ami = "ami-0376ec8eacdf70aae"
     instance_type = "t2.micro"
-    key_name = aws_key_pair.deployer-k.key_name
+    key_name = aws_key_pair.deployer.key_name
     vpc_security_group_ids = [aws_security_group.deployer_sg.id]
     connection {
       type = "ssh"
@@ -60,7 +60,7 @@ resource "aws_security_group" "deployer_sg" {
     } ]
 }
 
-resource "aws_key_pair" "deployer-k" {
+resource "aws_key_pair" "deployer" {
     key_name = var.key_name
     public_key = var.public_key
 }

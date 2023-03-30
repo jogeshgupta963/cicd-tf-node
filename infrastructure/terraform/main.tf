@@ -60,7 +60,7 @@ resource "aws_security_group" "deployer_sg" {
     } ]
 }
 
-resource "aws_key_pair" "deployer" {
+resource "aws_key_pair" "deployer-k" {
     key_name = var.key_name
     public_key = var.public_key
 }

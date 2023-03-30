@@ -75,7 +75,8 @@ jobs:
           AWS_DEFAULT_REGION: ap-south-1
         uses: appleboy/ssh-action@master
         with:
-          host: ${{env.SERVER_PUBLIC_IP}}
+          # host: ${{env.SERVER_PUBLIC_IP}}
+          host: 3.111.34.123
           username: ubuntu
           key: ${{env.AWS_SSH_KEY_PVT}}
           port: 22

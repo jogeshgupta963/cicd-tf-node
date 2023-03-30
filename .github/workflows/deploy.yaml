@@ -13,8 +13,8 @@ env:
 jobs:
   deploy-infra:
     runs-on: ubuntu-latest
-    # outputs:
-    #   SERVER_PUBLIC_IP: ${{steps.set-ip.outputs.instance_public_ip}}
+    outputs:
+      SERVER_PUBLIC_IP: ${{steps.set-ip.outputs.instance_public_ip}}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -24,7 +24,7 @@ jobs:
           terraform_wrapper: false
       - name: Terraform Init
         id: init
-        run: terraform init
+        run: terraform init -backend-config="bucket=$AWS_TF_STATE_BUCKET_NAME" -backend-config="region=ap-south-1"
         working-directory: ./infrastructure/terraform
       - name: Terraform Plan
         id: plan
@@ -32,18 +32,12 @@ jobs:
         working-directory: ./infrastructure/terraform
       - name: Terraform Apply
         id: apply
-        run: |-
-          terraform apply PLAN
-          echo SERVER_PUBLIC_IP=$(terraform output instance_public_ip) >> $GITHUB_ENV
+        run: terraform apply PLAN
         working-directory: ./infrastructure/terraform
-      # - name: Set outputs
-      #   id: set-ip
-      #   run: |-
-      #     terraform output instance_public_ip
-      #     echo ${{ env.SERVER_PUBLIC_IP }}
-      #   working-directory: ./infrastructure/terraform
-
-      # run: echo "::set-state name=instance_public_ip::$(terraform output instance_public_ip)"
+      - name: Set outputs
+        id: set-ip
+        run: echo "::set-output name=instance_public_ip::$(terraform-bin output instance_public_ip)"
+        working-directory: ./infrastructure/terraform
   deploy-app:
     runs-on: ubuntu-latest
     needs: deploy-infra
@@ -56,8 +50,8 @@ jobs:
           aws-access-key-id: ${{env.AWS_ACCESS_KEY_ID}}
           aws-secret-access-key: ${{env.AWS_SECRET_KEY_ID}}
           aws-region: ${{env.AWS_REGION}}
-      # - name: Set IP as env
-      #   run: echo SERVER_PUBLIC_IP=${{needs.deploy-infra.outputs.SERVER_PUBLIC_IP}} >> $GITHUB_ENV
+      - name: Set IP as env
+        run: echo SERVER_PUBLIC_IP=${{needs.deploy-infra.outputs.SERVER_PUBLIC_IP}} >> $GITHUB_ENV
       - name: Login to AWS ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
@@ -71,8 +65,6 @@ jobs:
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
         working-directory: ./server
-      - name: server ip
-        run: cat ${{env.SERVER_PUBLIC_IP}}
       - name: Deploy docker image to EC2
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}

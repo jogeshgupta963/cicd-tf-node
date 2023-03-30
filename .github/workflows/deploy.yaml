@@ -82,7 +82,7 @@ jobs:
           username: ubuntu
           key: ${{env.AWS_SSH_KEY_PVT}}
           port: 22
-          envs: AWS_SSH_KEY_PVT,REGISTRY,REPOSITORY,IMAGE_TAG,AWS_ACCESS_KEY_ID,AWS_SECRET_KEY_ID,AWS_REGION,AWS_DEFAULT_REGION
+          envs: AWS_SSH_KEY_PVT,AWS_SSH_KEY_PUBLIC,REGISTRY,REPOSITORY,IMAGE_TAG,AWS_ACCESS_KEY_ID,AWS_SECRET_KEY_ID,AWS_REGION,AWS_DEFAULT_REGION
           script: |-
             sudo apt update
             sudo apt install docker.io -y
